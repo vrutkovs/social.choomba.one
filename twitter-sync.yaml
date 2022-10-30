@@ -1,24 +1,42 @@
-apiVersion: batch/v1
-kind: CronJob
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
-  name: sync-with-twitter
+  name: twitter-sync
   namespace: vrutkovs-dev
+  labels:
+    app: twitter-sync
+    app.kubernetes.io/component: twitter-sync
+    app.kubernetes.io/instance: twitter-sync
+    app.kubernetes.io/name: twitter-sync
+    app.kubernetes.io/part-of: gotosocial-app
+    app.openshift.io/runtime: go-gopher
+    app.openshift.io/runtime-namespace: vrutkovs-dev
 spec:
-  schedule: '*/10 * * * *'
-  concurrencyPolicy: Forbid
-  jobTemplate:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: twitter-sync
+  template:
+    metadata:
+      labels:
+        app: twitter-sync
     spec:
-      template:
-        spec:
-          containers:
-            - name: twitter-sync
-              image: quay.io/vrutkovs/twitter-masto-bot
-              volumeMounts:
-              - name: config
-                mountPath: /code/config.yml
-                subPath: config.yml
-          volumes:
-          - name: config
-            secret:
-              secretName: twitter-sync
-          restartPolicy: OnFailure
+      containers:
+      - name: twitter-sync
+        image: quay.io/vrutkovs/twitter-masto-bot
+        command:
+        - pleroma-bot
+        - --forceDate
+        - '2015-01-01'
+        - --daemon
+        - --pollrate
+        - '10'
+        workingDir: /tmp
+        volumeMounts:
+        - name: config
+          mountPath: /tmp/config.yml
+          subPath: config.yml
+      volumes:
+      - name: config
+        secret:
+          secretName: twitter-sync
