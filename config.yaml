@@ -17,3 +17,7 @@ data:
       - "::1"
     db-type: "sqlite"
     db-address: "/gotosocial/data/sqlite.db"
+    storage-backend: "s3"
+    storage-local-base-path: "/gotosocial/storage"
+    storage-s3-endpoint: "s3.eu-central-1.amazonaws.com"
+    storage-s3-bucket: "vrutkovs-choomba"

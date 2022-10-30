@@ -71,6 +71,17 @@ spec:
             requests:
               cpu: 100m
               memory: 100Mi
+          env:
+          - name: GTS_STORAGE_S3_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: litestream
+                key: LITESTREAM_ACCESS_KEY_ID
+          - name: GTS_STORAGE_S3_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: litestream
+                key: LITESTREAM_SECRET_ACCESS_KEY
           volumeMounts:
           - name: gotosocial-config
             mountPath: /gotosocial/config
