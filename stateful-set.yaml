@@ -38,7 +38,7 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /gotosocial/data
-          - name: litestream-configmap
+          - name: litestream-config
             mountPath: /etc/litestream.yml
             subPath: litestream.yml
           env:
@@ -84,7 +84,7 @@ spec:
           volumeMounts:
           - name: data
             mountPath: /gotosocial/data
-          - name: configmap
+          - name: litestream-config
             mountPath: /etc/litestream.yml
             subPath: litestream.yml
           env:
