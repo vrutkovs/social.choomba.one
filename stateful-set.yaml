@@ -78,6 +78,29 @@ spec:
             mountPath: /gotosocial/data
           - name: user-media
             mountPath: /gotosocial/storage
+        - name: litestream
+          image: docker.io/litestream/litestream:0.3.9
+          args: ['replicate']
+          volumeMounts:
+          - name: data
+            mountPath: /gotosocial/data
+          - name: configmap
+            mountPath: /etc/litestream.yml
+            subPath: litestream.yml
+          env:
+          - name: LITESTREAM_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: litestream
+                key: LITESTREAM_ACCESS_KEY_ID
+          - name: LITESTREAM_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: litestream
+                key: LITESTREAM_SECRET_ACCESS_KEY
+          ports:
+          - name: metrics
+            containerPort: 9090
       volumes:
       - name: gotosocial-config
         configMap:
