@@ -1,0 +1,26 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: gotosocial
+  namespace: vrutkovs-dev
+  labels:
+    app: gotosocial
+    app.kubernetes.io/component: gotosocial
+    app.kubernetes.io/instance: gotosocial
+    app.kubernetes.io/name: gotosocial
+    app.kubernetes.io/part-of: gotosocial-app
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: stable
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        openshift.io/imported-from: 'docker.io/superseriousbusiness/gotosocial:0.5.2'
+      from:
+        kind: DockerImage
+        name: 'docker.io/superseriousbusiness/gotosocial:0.5.2'
+      generation: 2
+      importPolicy: {}
+      referencePolicy:
+        type: Local

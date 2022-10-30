@@ -1,0 +1,62 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"gotosocial:stable","namespace":"vrutkovs-dev"},"fieldPath":"spec.template.spec.containers[?(@.name==\"gotosocial\")].image","pause":"false"}]
+  name: gotosocial
+  namespace: vrutkovs-dev
+  labels:
+    app: gotosocial
+    app.kubernetes.io/component: gotosocial
+    app.kubernetes.io/instance: gotosocial
+    app.kubernetes.io/name: gotosocial
+    app.kubernetes.io/part-of: gotosocial-app
+    app.openshift.io/runtime: go-gopher
+    app.openshift.io/runtime-namespace: vrutkovs-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gotosocial
+  template:
+    metadata:
+      labels:
+        app: gotosocial
+        deployment: gotosocial
+    spec:
+      containers:
+        - name: gotosocial
+          image: ' '
+          command:
+          - /gotosocial/gotosocial
+          - --config-path
+          - /gotosocial/config/config.yaml
+          - server
+          - start
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '2'
+              memory: 2000Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+          - name: config
+            mountPath: /gotosocial/config
+          - name: data
+            mountPath: /gotosocial/data
+          - name: user-media
+            mountPath: /gotosocial/storage
+      volumes:
+      - name: config
+        configMap:
+          name: gotosocial
+      - name: data
+        emptyDir: {}
+      - name: user-media
+        emptyDir: {}

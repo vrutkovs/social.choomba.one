@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: gotosocial
+  namespace: vrutkovs-dev
+data:
+  config.yaml: |-
+    application-name: "Social Choomba"
+    host: "social.choomba.one"
+    account-domain: ""
+    protocol: "https"
+    bind-address: "0.0.0.0"
+    port: 8080
+    trusted-proxies:
+      - "127.0.0.1/32"
+      - "172.20.0.1/32"
+      - "::1"
+    db-type: "sqlite"
+    db-address: "/gotosocial/data/sqlite.db"

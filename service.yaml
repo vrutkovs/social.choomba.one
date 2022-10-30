@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gotosocial
+  namespace: vrutkovs-dev
+  labels:
+    app: gotosocial
+    app.kubernetes.io/component: gotosocial
+    app.kubernetes.io/instance: gotosocial
+    app.kubernetes.io/name: gotosocial
+    app.kubernetes.io/part-of: gotosocial-app
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: gotosocial
+    deployment: gotosocial
