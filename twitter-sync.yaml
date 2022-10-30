@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sync-with-twitter
+  namespace: vrutkovs-dev
+spec:
+  schedule: '*/10 * * * *'
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: twitter-sync
+              image: quay.io/vrutkovs/twitter-masto-bot
+              volumeMounts:
+              - name: config
+                mountPath: /code/config.yml
+                subPath: config.yml
+          volumes:
+          - name: config
+            secret:
+              secretName: twitter-sync
+          restartPolicy: OnFailure
