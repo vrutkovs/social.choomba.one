@@ -26,6 +26,32 @@ spec:
         app: gotosocial
         deployment: gotosocial
     spec:
+      initContainers:
+        - name: init-litestream
+          image: docker.io/litestream/litestream:0.3.9
+          args:
+          - 'restore'
+          - '-if-db-not-exists'
+          - '-if-replica-exists'
+          - '-v'
+          - '/gotosocial/data/sqlite.db'
+          volumeMounts:
+          - name: data
+            mountPath: /gotosocial/data
+          - name: litestream-configmap
+            mountPath: /etc/litestream.yml
+            subPath: litestream.yml
+          env:
+          - name: LITESTREAM_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: litestream
+                key: LITESTREAM_ACCESS_KEY_ID
+          - name: LITESTREAM_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: litestream
+                key: LITESTREAM_SECRET_ACCESS_KEY
       containers:
         - name: gotosocial
           image: ' '
@@ -46,16 +72,19 @@ spec:
               cpu: 100m
               memory: 100Mi
           volumeMounts:
-          - name: config
+          - name: gotosocial-config
             mountPath: /gotosocial/config
           - name: data
             mountPath: /gotosocial/data
           - name: user-media
             mountPath: /gotosocial/storage
       volumes:
-      - name: config
+      - name: gotosocial-config
         configMap:
           name: gotosocial
+      - name: litestream-config
+        configMap:
+          name: litestream
       - name: data
         emptyDir: {}
       - name: user-media
