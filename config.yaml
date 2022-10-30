@@ -21,3 +21,4 @@ data:
     storage-local-base-path: "/gotosocial/storage"
     storage-s3-endpoint: "s3.eu-central-1.amazonaws.com"
     storage-s3-bucket: "vrutkovs-choomba"
+    instance-expose-peers: true
