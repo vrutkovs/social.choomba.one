@@ -4,7 +4,7 @@ metadata:
   annotations:
     alpha.image.policy.openshift.io/resolve-names: '*'
     image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"gotosocial:stable","namespace":"vrutkovs-dev"},"fieldPath":"spec.template.spec.containers[?(@.name==\"gotosocial\")].image","pause":"false"}]
+      [{"from":{"kind":"ImageStreamTag","name":"gotosocial:stable","namespace":"vrutkovs-dev"},"fieldPath":"spec.template.spec.containers[?(@.name==\"gotosocial\")].image","pause":"false"},{"from":{"kind":"ImageStreamTag","name":"litestream:stable","namespace":"vrutkovs-dev"},"fieldPath":"spec.template.spec.initContainers[?(@.name==\"init-litestream\")].image","pause":"false"},{"from":{"kind":"ImageStreamTag","name":"litestream:stable","namespace":"vrutkovs-dev"},"fieldPath":"spec.template.spec.containers[?(@.name==\"litestream\")].image","pause":"false"}]
   name: gotosocial
   namespace: vrutkovs-dev
   labels:
@@ -28,7 +28,7 @@ spec:
     spec:
       initContainers:
         - name: init-litestream
-          image: docker.io/litestream/litestream:0.3.9
+          image: ' '
           args:
           - 'restore'
           - '-if-db-not-exists'
@@ -79,7 +79,7 @@ spec:
           - name: user-media
             mountPath: /gotosocial/storage
         - name: litestream
-          image: docker.io/litestream/litestream:0.3.9
+          image: ' '
           args: ['replicate']
           volumeMounts:
           - name: data

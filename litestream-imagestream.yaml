@@ -1,0 +1,15 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: litestream
+  namespace: vrutkovs-dev
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: stable
+      from:
+        kind: DockerImage
+        name: 'docker.io/litestream/litestream:0.3.9'
+      referencePolicy:
+        type: Local
