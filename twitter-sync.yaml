@@ -27,7 +27,7 @@ spec:
         command:
         - pleroma-bot
         - --forceDate
-        - '2015-01-01'
+        - ''
         - --daemon
         - --pollrate
         - '10'
